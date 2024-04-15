@@ -21,7 +21,7 @@
 								is required</small>
 						</div>
 						<div class="form-group">
-							<label for="password">Password</label> <input type="password"
+							<label for="password"> New Password</label> <input type="password"
 								class="form-control" name="password" id="password"
 								placeholder="Password" />
 						</div>

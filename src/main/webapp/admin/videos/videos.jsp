@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<form action="UploadFile" method="post" enctype="multipart/form-data">
 <div class="col mt-4">
 <jsp:include page="/common/inform.jsp"></jsp:include>
 	<ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -97,16 +99,19 @@
 					<td>Status</td>
 					<td>&nbsp;</td>
 				</tr>
+					<c:forEach var="item" items="${videos }">
 				<tr>
-					<td>YTT</td>
-					<td>Java programing</td>
-					<td>105</td>
-					<td>Active</td>
-					<td><a href=""><i class="fa fa-edit" aria-hidden="true"></i>
-							Edit</a> <a href=""><i class="fa fa-trash" aria-hidden="true"></i>Delete</a>
+					<td>${item.videoId}</td>
+					<td>${item.title}</td>
+					<td>${item.views}</td>
+					<td>${item.active}</td>
+					<td><a href="Admin/VideosManagement/edit?videoId=${item.videoId}"><i class="fa fa-edit" aria-hidden="true"></i>
+							Edit</a> <a href="Admin/VideosManagement/delete?videoId=${item.videoId}"><i class="fa fa-trash" aria-hidden="true"></i>Delete</a>
 					</td>
 				</tr>
+				</c:forEach>
 			</table>
 		</div>
 	</div>
 </div>
+</form>

@@ -36,5 +36,21 @@ public class FavoriteDao extends AbstractEntityDao<Favorite> {
 		return list;
 		}
 	
+	public List<Favorite> findFavoriteByUser(String username) {
+		EntityManager em = JpaUtils.getEntityManager();
+		TypedQuery<Favorite> query = em.createQuery("SELECT f FROM Favorite f WHERE f.user.username = :username", Favorite.class);
+		query.setParameter("username", username);
+		return query.getResultList();
+	}
+	
+	public Favorite findFavoriteByVideoId(String videoId,String username) {
+	    List<Favorite> favorites = findAll(); // Assuming that you have a findAll() method that returns a list of all Favorite objects
+	    for (Favorite favorite : favorites) {
+	        if (favorite.getVideo().getVideoId().equals(videoId)&& favorite.getUser().getUsername().equals(username)) {
+	            return favorite;
+	        }
+	    }
+	    return null; // Return null if no Favorite object is found for the given videoId
+	}
 	
 }

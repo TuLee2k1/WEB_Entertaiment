@@ -60,4 +60,17 @@ public class UserDAO extends AbstractEntityDao<User> {
 			em.close();
 		}
 	}
+	
+	public User findByUsername(String username) {
+		EntityManager em = JpaUtils.getEntityManager();
+		String jpql = "select u from User u where u.id = :username";
+		try {
+			TypedQuery<User> query = em.createQuery(jpql, User.class);
+			query.setParameter("username", username);
+
+			return query.getSingleResult();
+		} finally {
+			em.close();
+		}
+	}
 }

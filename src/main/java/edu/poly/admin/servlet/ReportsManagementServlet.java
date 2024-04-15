@@ -19,7 +19,7 @@ import edu.poly.model.Video;
 /**
  * Servlet implementation class ReportsManagementServlet
  */
-@WebServlet("/ReportsManagementServlet")
+@WebServlet("/ReportsManagement")
 public class ReportsManagementServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

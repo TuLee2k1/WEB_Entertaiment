@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <!doctype html>
 <html lang="en">
@@ -28,18 +30,18 @@
                             <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="Admin/VideosManagement">
                                 <i class="fa fa-info" aria-hidden="true"></i> Videos
                                 </a>
                         </li>
                         <div class="nav-item">
-                            <a href="" class="nav-link">
+                            <a href="Admin/UsersManagement" class="nav-link">
                                 <i class="fa fa-id-card" aria-hidden="true"></i> Users
                             </a>
                         </div>
 
                         <div class="nav-item">
-                            <a href="" class="nav-link">
+                            <a href="ReportsManagement" class="nav-link">
                                 <i class="fa fa-comments" aria-hidden="true"></i> Reports
                             </a>
                         </div>

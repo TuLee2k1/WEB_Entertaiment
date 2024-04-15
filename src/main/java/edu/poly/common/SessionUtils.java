@@ -24,4 +24,9 @@ public class SessionUtils {
 		Object username = get(request,"username");
 		return username == null?null:username.toString();
 	}
+	
+	public static boolean isLoginRole(HttpServletRequest request) {
+	    Object admin = get(request,"admin");
+	    return admin != null && (Boolean) admin;
+	}
 }

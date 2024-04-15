@@ -1,8 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 
 <div class="col mt-4">
+<jsp:include page="/common/inform.jsp"></jsp:include>
 <ul class="nav nav-tabs" id="myTab" role="tablist">
 	<li class="nav-item" role="presentation">
 		<button class="nav-link active" id="videoEditing-tab"
@@ -62,10 +65,10 @@
 						</div>
 					</div>
 					<div class="card-footer text-muted">
-						<button class="btn btn-primary">Create</button>
-						<button class="btn btn-warning">Update</button>
-						<button class="btn btn-danger">Delete</button>
-						<button class="btn btn-info">Reset</button>
+						<button class="btn btn-primary" formaction="Admin/UsersManagement/create">>Create</button>
+						<button class="btn btn-warning" formaction="Admin/UsersManagement/update">>Update</button>
+						<button class="btn btn-danger" formaction="Admin/UsersManagement/delete">>Delete</button>
+						<button class="btn btn-info" formaction="Admin/UsersManagement/reset">>Reset</button>
 					</div>
 				</div>
 			</form>
@@ -81,15 +84,17 @@
 					<td>Role</td>
 					<td>&nbsp;</td>
 				</tr>
+				<c:forEach var="item" items="${users }">
 				<tr>
-					<td>Tulee</td>
-					<td>Le Ba Tu</td>
-					<td>leetub4@gmail.com</td>
-					<td>Admin</td>
-					<td><a href=""><i class="fa fa-edit" aria-hidden="true"></i>
-							Edit</a> <a href=""><i class="fa fa-trash" aria-hidden="true"></i>Delete</a>
+					<td>${item.username }</td>
+					<td>${item.fullname }</td>
+					<td>${item.email }</td>
+					<td>${item.admin }</td>
+					<td><a href="Admin/UsersManagement/edit?username=${item.username}"><i class="fa fa-edit" aria-hidden="true"></i>
+							Edit</a> <a href="Admin/UsersManagement/delete?username=${item.username}"><i class="fa fa-trash" aria-hidden="true"></i>Delete</a>
 					</td>
 				</tr>
+				</c:forEach>
 			</table>
 		</div>
 	</div>

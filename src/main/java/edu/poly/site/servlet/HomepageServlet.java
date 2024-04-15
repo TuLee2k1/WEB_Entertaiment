@@ -23,12 +23,22 @@ public class HomepageServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		try {
-			VideoDAO dao = new VideoDAO();
 			
-			List<Video> list = dao.findAll();
+			
+			VideoDAO dao = new VideoDAO();
+
+			 int currentPage = 1;
+	            if (request.getParameter("page") != null) {
+	                currentPage = Integer.parseInt(request.getParameter("page"));
+	            }
+			
+			List<Video> list = dao.findAll(currentPage);
 			request.setAttribute("videos", list);
 			
-			
+			int noOfPages = dao.getNoOfPages();
+            request.setAttribute("noOfPages", noOfPages);
+            request.setAttribute("currentPage", currentPage);
+            
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();

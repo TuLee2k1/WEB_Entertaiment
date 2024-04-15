@@ -1,6 +1,8 @@
 package edu.poly.admin.servlet;
 
 import java.io.IOException;
+import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -33,17 +35,29 @@ public class VideosManagementServlet extends HttpServlet {
 		}
 		
 		if(url.contains("delete")) {
-			edit(request,response);
+			delete(request,response);
 			return;
 		}
 		
 		if(url.contains("reset")) {
-			edit(request,response);
+			reset(request,response);
 			return;
 		}
 		Video video = new Video();
 		video.setPoster("iamges/mac6.png");
 		request.setAttribute("video", video);
+		
+		try {
+			VideoDAO dao = new VideoDAO();
+			
+			List<Video> list = dao.findAll();
+			request.setAttribute("videos", list);
+            
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			request.setAttribute("error", e.getMessage());
+		}
 		
 		
 		PageInfo.prepareAndForward(request, response, PageType.VIDEO_MANAGEMENT_PAGE);
@@ -62,18 +76,18 @@ public class VideosManagementServlet extends HttpServlet {
 			return;
 		}
 
-		if(url.contains("deleta")) {
-			create(request,response);
+		if(url.contains("delete")) {
+			delete(request,response);
 			return;
 		}
 		
 		if(url.contains("update")) {
-			create(request,response);
+			update(request,response);
 			return;
 		}
 	
 		if(url.contains("reset")) {
-			create(request,response);
+			reset(request,response);
 			return;
 		}
 	}
@@ -85,7 +99,7 @@ public class VideosManagementServlet extends HttpServlet {
 		try {
 			BeanUtils.populate(video, request.getParameterMap());
 			
-			video.setPoster("uploads/"+ UploadUtils.processUploadField("vover",request,"/uploads",video.getVideoId()));
+			video.setPoster("images/"+ UploadUtils.processUploadField("vover",request,"/images",video.getVideoId()));
 			 VideoDAO dao = new VideoDAO();
 			 dao.insert(video);
 			 
@@ -99,6 +113,68 @@ public class VideosManagementServlet extends HttpServlet {
 		}
 		PageInfo.prepareAndForward(request, response, PageType.VIDEO_MANAGEMENT_PAGE);
 		
+	}
+	
+	private void delete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	    String videoId = request.getParameter("videoId");
+	    try {
+	    	if (videoId != null && !videoId.isEmpty()) {
+		        VideoDAO dao = new VideoDAO();
+		        Video video = dao.findById(videoId);
+		        if (video != null) {
+		            dao.delete(videoId);
+		            request.setAttribute("message", "Video is deleted!!!");
+		            request.setAttribute("video", video);
+		        } else {
+		            request.setAttribute("error", "Error: Video not found");
+		        }
+		    } else {
+		        request.setAttribute("error", "Error: Invalid video ID");
+		    }
+		} catch (Exception e) {
+			// TODO: handle exception
+			request.setAttribute("error", e.getMessage());
+		}
+	    try {
+			VideoDAO dao = new VideoDAO();
+			
+			List<Video> list = dao.findAll();
+			request.setAttribute("videos", list);
+            
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			request.setAttribute("error", e.getMessage());
+		}
+	    PageInfo.prepareAndForward(request, response, PageType.VIDEO_MANAGEMENT_PAGE);
+	}
+	
+	private void update(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	    String videoId = request.getParameter("videoId");
+	    if (videoId != null && !videoId.isEmpty()) {
+	        Video video = new Video();
+	        try {
+	            BeanUtils.populate(video, request.getParameterMap());
+	            video.setVideoId(videoId);
+	            video.setPoster("images/" + UploadUtils.processUploadField("vover", request, "/images", videoId));
+	            VideoDAO dao = new VideoDAO();
+	            dao.update(video);
+	            request.setAttribute("video", video);
+	            request.setAttribute("message", "Video is updated!!!");
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            request.setAttribute("error", "Error: " + e.getMessage());
+	        }
+	    } else {
+	        request.setAttribute("error", "Error: Invalid video ID");
+	    }
+	    PageInfo.prepareAndForward(request, response, PageType.VIDEO_MANAGEMENT_PAGE);
+	}
+	
+	private void reset(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	    request.setAttribute("video", new Video());
+	    request.setAttribute("message", "Video is reset!!!");
+	    PageInfo.prepareAndForward(request, response, PageType.VIDEO_MANAGEMENT_PAGE);
 	}
 
 }

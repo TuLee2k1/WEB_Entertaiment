@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.beanutils.BeanUtils;
 
 import edu.poly.common.CookieUtils;
+import edu.poly.common.EmailUtils;
 import edu.poly.common.PageInfo;
 import edu.poly.common.PageType;
 import edu.poly.common.SessionUtils;
@@ -55,13 +56,35 @@ public class LoginServlet extends HttpServlet {
 				}else {
 					CookieUtils.add("username", form.getUsername(), 0, response);
 				}
+				boolean admin = user.getAdmin();
+				String username = request.getParameter("username");
+				User users = dao.findByUsername(username);
+				
+				if(users == null) {
+					request.setAttribute("error", "Username is incorrect");
+				}else {
+					edu.poly.domain.Email email = new edu.poly.domain.Email();
+					email.setFrom("leetub4@gmail.com");
+					email.setFromPassword("iqbz zhxy zvnt yspx");
+					email.setTo(users.getEmail());
+					email.setSubject("Welcome");
+					StringBuilder sb = new StringBuilder();
+					sb.append("Dear ").append(username).append("<br>");
+					sb.append("Welcome ").append(users.getFullname()).append("<br>");
+					sb.append("Regard<br>");
+					sb.append("Administrator");
+					
+					email.setContent(sb.toString());
+					EmailUtils.send(email);
+				}
+				request.setAttribute("isLoginRole", admin);
 				request.setAttribute("isLogin", true);
 				request.setAttribute("name", user.getFullname());
 				request.getRequestDispatcher("/Homepage").forward(request, response);
 				return;
 			}
-			request.setAttribute("error", "invalid username or password");
 			
+			request.setAttribute("error", "invalid username or password");
 			
 		} catch (Exception e) {
 			e.printStackTrace();
